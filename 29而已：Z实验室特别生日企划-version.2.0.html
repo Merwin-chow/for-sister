@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>29而已：Z实验室特别生日企划-version.2.0</title>
+<style>
+  /* --- 全局基础样式 --- */
+  body { 
+    font-family: 'Songti SC', 'Noto Serif SC', 'SimSun', serif; 
+    background-color: #f8f6f0; color: #4a4538; text-align: center; 
+    padding: 0 0 50px 0; margin: 0; 
+  }
+  
+  /* --- 顶部封面 --- */
+  .hero-section { padding: 60px 20px 40px; background: linear-gradient(to bottom, #eae5d9 0%, #f8f6f0 100%); }
+  .hero-photo { 
+    width: 200px; height: 260px; object-fit: cover; border-radius: 4px; 
+    border: 6px solid #fff; box-shadow: 0 8px 20px rgba(74,69,56,0.1); 
+    margin-bottom: 25px; transform: rotate(2deg); cursor: zoom-in;
+  }
+  h1 { color: #3b362a; font-weight: normal; letter-spacing: 4px; margin-bottom: 15px; font-size: 24px; }
+  .slogan { color: #6d6657; font-size: 15px; letter-spacing: 2px; margin-bottom: 40px; }
+
+  /* --- 使用协议区 --- */
+  .rules-box {
+    max-width: 800px; margin: 0 auto 50px; padding: 30px; background: #ffffff;
+    border: 1px solid #ebe6da; border-radius: 4px; text-align: left;
+    box-shadow: 0 4px 15px rgba(74, 69, 56, 0.03);
+    font-family: 'PingFang SC', sans-serif; line-height: 1.8; color: #5a5446; font-size: 14px;
+  }
+  .rules-box h3 { text-align: center; font-family: 'Songti SC', serif; color: #3b362a; letter-spacing: 3px; margin: 0 0 20px 0; font-size: 18px; }
+  .highlight { color: #8c6a4b; font-weight: bold; }
+
+  /* --- 这里的样式是为了让分类标题更好看 --- */
+  .category-title {
+    font-size: 20px; color: #3b362a; margin: 60px 0 30px; letter-spacing: 4px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .category-title::before, .category-title::after { content: ''; width: 40px; height: 1px; background-color: #d1cbc0; margin: 0 15px; }
+
+  /* --- 卡片布局 --- */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 25px; max-width: 1100px; margin: 0 auto; padding: 0 20px; text-align: left; }
+  .card { background: #ffffff; padding: 20px; border-radius: 4px; border: 1px solid #ebe6da; box-shadow: 0 2px 10px rgba(74, 69, 56, 0.05); transition: 0.4s; display: flex; flex-direction: column; }
+  .card:hover { transform: translateY(-8px); box-shadow: 0 12px 20px rgba(74, 69, 56, 0.12); }
+  .card img { width: 100%; height: 180px; object-fit: cover; border-radius: 2px; margin-bottom: 20px; cursor: zoom-in; }
+  .card h3 { margin: 0 0 15px 0; color: #3b362a; font-size: 18px; border-bottom: 1px dashed #ebe6da; padding-bottom: 10px; }
+  .card p { font-size: 13px; color: #6d6657; margin-bottom: 20px; flex-grow: 1; line-height: 1.8; }
+  .card.used { opacity: 0.4; filter: grayscale(100%); transform: none; }
+
+  button { background: transparent; color: #4a4538; border: 1px solid #4a4538; padding: 10px 0; border-radius: 2px; cursor: pointer; font-size: 13px; letter-spacing: 2px; }
+  button:hover:not(:disabled) { background: #4a4538; color: #f8f6f0; }
+  button:disabled { border-color: #d1cbc0; color: #d1cbc0; }
+
+  /* --- 🌟 图片放大层 (Lightbox) --- */
+  #zoom-overlay {
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9); z-index: 10000; justify-content: center; align-items: center;
+    cursor: zoom-out;
+  }
+  #zoom-overlay img { max-width: 95%; max-height: 95%; border-radius: 4px; box-shadow: 0 0 30px rgba(0,0,0,0.5); }
+
+  /* --- 🌟 底部彩蛋矩阵 --- */
+  .mystery-section { margin: 80px auto 40px; max-width: 1100px; padding: 0 20px; }
+  .mystery-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); 
+    gap: 20px; 
+    justify-items: center; 
+    margin-top: 30px;
+  }
+  .flip-container { perspective: 1000px; width: 180px; height: 250px; cursor: pointer; }
+  .flip-container.flip .flipper { transform: rotateY(180deg); }
+  .flipper { transition: 0.8s; transform-style: preserve-3d; position: relative; width: 100%; height: 100%; }
+  .front, .back { backface-visibility: hidden; position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 8px; display: flex; justify-content: center; align-items: center; }
+  .front { background: #4a4538; color: #f8f6f0; border: 4px solid #ebe6da; flex-direction: column; }
+  .back { background: #ffffff; transform: rotateY(180deg); border: 1px solid #ebe6da; padding: 8px; }
+  .back img { width: 100%; height: 100%; object-fit: cover; border-radius: 4px; }
+  .reset-btn { width: 140px; margin-top: 50px; background: #8c6a4b; color: white; border: none; border-radius: 20px; padding: 10px 0; cursor: pointer; font-size: 14px; }
+</style>
+</head>
+<body>
+
+  <!-- 放大查看层 -->
+  <div id="zoom-overlay" onclick="this.style.display='none'">
+    <img id="zoom-img" src="" alt="放大图片">
+  </div>
+
+  <!-- 顶部标题区 -->
+  <div class="hero-section">
+    <img src="主照片.png" class="hero-photo" onclick="showZoom(this.src)" onerror="this.src='https://images.unsplash.com/photo-1615529182904-14819c35db37?w=400';">
+    <h1>29而已：Z实验室特别生日企划-version.2.0</h1>
+    <div class="slogan">本卡由 Z 实验室出品。宗旨：全心全意为我的姐姐服务</div>
+  </div>
+
+  <!-- 使用须知协议区 -->
+  <div class="rules-box">
+    <h3>[ 使 用 须 知 ]</h3>
+    <p>卡片共计 <span class="highlight">29 张标准卡 + 1 张功能卡</span>，专为姐姐的 29 岁生日设计，但我觉得"30而立，30而已"这句话我也喜欢，就凑了一张哈哈。</p>
+    <p><strong>· 生效逻辑：</strong>本手册所有卡片自 29 岁生日起生效，有效期至卡片核销完毕。</p>
+    <p><strong>· 执行标准：</strong>若执行人态度消极或未达预期，持卡人拥有“一键重来”或“更换同等价值卡片”的最终解释权。</p>
+    <p><strong>· 财务部提示：</strong>涉及奖金的卡片，每月限兑三次，请合理规划你的策略。（打卡类分月结算不计入限额限制）。</p>
+    <p><strong>· 容错机制：</strong>打卡类挑战若甲方未完成，该卡进度归零，但卡片仍旧有效。因为<span class="highlight">“姐姐教会我生活容错率很高”</span>。</p>
+    
+    <h3 style="margin-top: 25px; border-top: 1px dashed #ebe6da; padding-top: 25px;">[ 系 统 操 作 指 南 ]</h3>
+    <p><strong>· 🔍 视觉交互特权：</strong>本系统全线开启“高清回忆”模式。点击手册内<span class="highlight">任意一张图片</span>均可全屏放大查看，再次点击图片即可复原。</p>
+    <p><strong>· ⚡ 指令下达机制：</strong>点击卡片下方“发出指令”按钮并确认，即视为核销。注意：系统开启“本地记忆锁定”，指令一旦发出卡片即变灰且不可撤销。</p>
+    <p><strong>· 🎁 回忆矩阵：</strong>界面底部搭载“Z-实验室多维彩蛋系统”。持卡人可自由挑选卡牌进行翻转。点击“重置漫游惊喜”将触发系统<span class="highlight">随机洗牌逻辑</span>。</p>
+
+    <!-- 增加：数据同步与管理按钮 -->
+    <div style="margin-top: 25px; display: flex; gap: 10px; justify-content: center;">
+      <button onclick="syncReport()" style="flex: 2; background: #8c6a4b; color: white; border: none; border-radius: 4px; height: 40px;">📤 同步进度给执行人</button>
+      <button onclick="resetSystem()" style="flex: 1; font-size: 11px; border-color: #d1cbc0; color: #d1cbc0; border-radius: 4px;">⚠️ 重置系统</button>
+    </div>
+  </div>
+
+  <!-- 卡券显示容器 -->
+  <div id="card-container"></div>
+
+  <!-- 彩蛋矩阵区 -->
+  <div class="mystery-section">
+    <div class="category-title">✦ 专属回忆菜单 ✦</div>
+    <div class="mystery-grid" id="mystery-grid"></div>
+    <button class="reset-btn" onclick="renderMysteryGrid()">重 置 漫 游 惊 喜</button>
+  </div>
+
+<script>
+  const coupons =[
+    { id: 1, category: "一、生活礼遇", title: "整理房间券", desc: "【选项A】你来提要求，我来实现。<br>【选项B】我实现，你验收，若不满意可替换其他卡片或重新生效。", image: "微信图片_20260509163737_777_6.jpg" },
+    { id: 2, category: "一、生活礼遇", title: "夜宵券", desc: "【选项A】你决定，我付款。<br>【选项B】我来规划，若体验不好可替换或重新生效。", image: "微信图片_20260509163739_780_6.png" },
+    { id: 3, category: "一、生活礼遇", title: "零食礼包券", desc: "【选项A】我设计一次零食套餐提供给你。<br>【选项B】你来挑，我来付款。", image: "微信图片_20260509163738_778_6.jpg" },
+    { id: 4, category: "一、生活礼遇", title: "大餐券", desc: "【选项A】为你做一顿不少于四个菜的家常饭。<br>【选项B】提供一次大餐费用（上限300元）。", image: "微信图片_20260509171450_812_6.jpg" },
+    { id: 5, category: "一、生活礼遇", title: "开车接送券", desc: "你选择可行载具：可抽象亦可为正常交通工具。（若要开车接送，请注意安全，并确保我有能力）。", image: "微信图片_20260509163738_779_6.png" },
+    { id: 6, category: "一、生活礼遇", title: "按摩券", desc: "【选项A】我为你设计按摩方案。<br>【选项B】提供一次按摩经费（上限200元）。", image: "微信图片_20260509163740_781_6.png" },
+    { id: 7, category: "一、生活礼遇", title: "看日出券", desc: "提供叫醒服务，并陪你一起去看日出。", image: "微信图片_20260509163741_782_6.png" },
+    { id: 8, category: "一、生活礼遇", title: "随机掉落券 (盲盒卡)", desc: "使用时，由乙方在 24 小时内为你随机策划一个惊喜。", image: "微信图片_20260509163741_783_6.png" },
+    { id: 9, category: "一、生活礼遇", title: "愿望券", desc: "为你实现一个我能力范围内的愿望。（温馨提示：建议心愿比较强烈时使用）", image: "微信图片_20260509163742_784_6.png" },
+    { id: 10, category: "一、生活礼遇", title: "新衣券", desc: "【选项A】提出要求，为你完成检索并下单。<br>【选项B】提供经费（上限600元）。", image: "微信图片_20260509165818_803_6.jpg" },
+    { id: 11, category: "一、生活礼遇", title: "接受批评券", desc: "乙方时常冲动，使用该券，可使其强制冷静并听完所有意见。", image: "微信图片_20260509163743_785_6.png" },
+    { id: 12, category: "一、生活礼遇", title: "社交挡箭牌券", desc: "遇到不想回的电话/客服或尴尬的社交拒绝时使用。乙方代出面沟通或提供文案，承担所有沟通成本。", image: "微信图片_20260509163743_786_6.png" },
+    { id: 13, category: "一、生活礼遇", title: "家具券", desc: "【选项A】提供一次家具经费（300元内）。<br>【选项B】主动购置。", image: "微信图片_20260509163744_787_6.png" },
+    { id: 14, category: "二、趣味时光", title: "拼豆券", desc: "【选项A】提供一次拼豆费用。<br>【选项B】我为你拼一次豆", image: "微信图片_20260509165940_804_6.jpg" },
+    { id: 15, category: "二、趣味时光", title: "KTV券", desc: "提供一次 KTV 欢唱经费。(该卡颇有凑的嫌疑，可直接修改或者替换为别的)", image: "微信图片_20260509163745_788_6.png" },
+    { id: 16, category: "二、趣味时光", title: "野餐券", desc: "使用该卡，我将为你精心设计一次野餐计划。", image: "微信图片_20260509163746_789_6.png" },
+    { id: 17, category: "二、趣味时光", title: "登山券", desc: "一起爬山，这次我绝对不先赶着走！你可随时提出物资要求。", image: "微信图片_20260509163747_790_6.jpg" },
+    { id: 18, category: "二、趣味时光", title: "手工券", desc: "【选项A】提供你需要的手工包。<br>【选项B】为你制作一个手工。", image: "微信图片_20260509163747_791_6.jpg" },
+    { id: 19, category: "二、趣味时光", title: "微电影券", desc: "利用你提供或我搜集的一个月/特定事件碎片素材，利用AI剪辑、配乐并写旁白，交付一条不少于3分钟的人生短片。", image: "微信图片_20260509163748_792_6.png" },
+    { id: 20, category: "二、趣味时光", title: "DIY蛋糕券", desc: "一起制作一个蛋糕（也可替换为其它 DIY 项目）。", image: "微信图片_20260509163749_793_6.png" },
+    { id: 21, category: "二、趣味时光", title: "设备券", desc: "提供500元内的设备购买支持。（温馨提示：较为大额，请仔细考虑后使用）。", image: "微信图片_20260509163750_794_6.png" },
+    { id: 22, category: "三、旅行出游", title: "导游券", desc: "我将负责当旅游规划者，完成所有攻略、规划，并在行程中尽可能提供高效率、贴心的服务。", image: "微信图片_20260509163750_795_6.png" },
+    { id: 23, category: "三、旅行出游", title: "写真券", desc: "【选项A】你发起请求，我构思并为你拍摄写真。<br>【选项B】为你拍摄写真提供一次经费。", image: "微信图片_20260509171226_807_6.jpg" },
+    { id: 24, category: "四、进阶奖励", title: "冲浪板打卡", desc: "完成一次特殊动作，可收获奖金 100元 / 设备。", image: "微信图片_20260509163751_796_6.png" },
+    { id: 25, category: "四、进阶奖励", title: "画画学习", desc: "你创作一幅画作，可收获我的一幅画作或其它小礼物。", image: "微信图片_20260509170341_805_6.png" },
+    { id: 26, category: "五、打卡类（自挑战日起）", title: "30天奶茶挑战", desc: "每三天检查一次，若坚持30天未饮用，可获得奖金50元或等价奖励。失败可重来。", image: "微信图片_20260509163752_797_6.png" },
+    { id: 27, category: "五、打卡类（自挑战日起）", title: "7天运动挑战", desc: "7天内完成2次30分钟及以上锻炼，可获得运动器械（100元内）或90元奖金。", image: "微信图片_20260509163753_799_6.png" },
+    { id: 28, category: "五、打卡类（自挑战日起）", title: "30天运动挑战", desc: "30天内完成9次运动，可获得 100 元奖励。", image: "微信图片_20260509163754_800_6.png" },
+    { id: 29, category: "五、打卡类（自挑战日起）", title: "电子排毒打卡", desc: "连续7天在23:30前放下手机(不刷短视频)。奖励：价值100元的实体书籍或眼部按摩仪经费。", image: "微信图片_20260509170521_806_6.png" },
+    { id: 30, category: "✦ 附赠：功能券", title: "复制卡", desc: "神级道具：可无条件复制本手册中的任意一张卡片。", image: "微信图片_20260509163754_801_6.png" }
+  ];
+
+  const mysteryPhotos = [
+    "微信图片_20260509171448_809_6.jpg", "微信图片_20260509171448_810_6.jpg", "微信图片_20260509171449_811_6.jpg", 
+    "微信图片_20260509173414_814_6.jpg", "微信图片_20260509174112_815_6.jpg", "微信图片_20260509174112_816_6.jpg",
+    "微信图片_20260509174113_817_6.jpg", "微信图片_20260509174114_818_6.jpg", "微信图片_20260509174114_819_6.jpg",
+    "微信图片_20260509174115_820_6.jpg", "微信图片_20260509174116_821_6.jpg", "微信图片_20260509174117_822_6.jpg",
+    "微信图片_20260509174117_823_6.jpg", "微信图片_20260509174118_824_6.jpg", "微信图片_20260509174118_825_6.jpg", 
+    "微信图片_20260509174119_826_6.jpg", "微信图片_20260509174120_827_6.jpg", "微信图片_20260509174121_828_6.jpg",
+    "微信图片_20260509174121_829_6.jpg", "微信图片_20260509174122_830_6.jpg", "微信图片_20260509174123_831_6.jpg",
+    "微信图片_20260509174123_832_6.jpg", "微信图片_20260509174124_833_6.jpg", "微信图片_20260509174125_834_6.jpg"
+  ]; 
+
+  function render() {
+    const container = document.getElementById('card-container');
+    container.innerHTML = '';
+    let currentCategory = '';
+    let currentGrid = null;
+
+    coupons.forEach(coupon => {
+      if (coupon.category !== currentCategory) {
+        currentCategory = coupon.category;
+        const titleDiv = document.createElement('div');
+        titleDiv.className = 'category-title';
+        titleDiv.innerText = currentCategory;
+        container.appendChild(titleDiv);
+        currentGrid = document.createElement('div');
+        currentGrid.className = 'grid';
+        container.appendChild(currentGrid);
+      }
+      const isUsed = localStorage.getItem(`coupon_${coupon.id}`) === 'true';
+      const card = document.createElement('div');
+      card.className = `card ${isUsed ? 'used' : ''}`;
+      card.innerHTML = `
+        <img src="${coupon.image}" onclick="showZoom(this.src)" onerror="this.src='https://images.unsplash.com/photo-1577083165261-248671607ef1?w=400';">
+        <h3>${coupon.title}</h3>
+        <p>${coupon.desc}</p>
+        <button ${isUsed ? 'disabled' : ''} onclick="useCoupon(${coupon.id})">
+          ${isUsed ? '已 消 耗' : '发 出 指 令'}
+        </button>
+      `;
+      currentGrid.appendChild(card);
+    });
+  }
+
+  function renderMysteryGrid() {
+    const grid = document.getElementById('mystery-grid');
+    grid.innerHTML = '';
+    const count = 6; 
+    const shuffled = [...mysteryPhotos].sort(() => 0.5 - Math.random());
+    for(let i=0; i<count; i++) {
+        const photoSrc = shuffled[i % shuffled.length];
+        const cardHtml = `
+            <div class="flip-container" onclick="this.classList.toggle('flip')">
+                <div class="flipper">
+                    <div class="front">
+                        <div style="font-size:16px; letter-spacing:4px; writing-mode:vertical-rl;">神秘彩蛋</div>
+                    </div>
+                    <div class="back">
+                        <img src="${photoSrc}" onclick="event.stopPropagation(); showZoom(this.src);">
+                    </div>
+                </div>
+            </div>
+        `;
+        grid.innerHTML += cardHtml;
+    }
+  }
+
+  function showZoom(src) {
+    const overlay = document.getElementById('zoom-overlay');
+    const zoomImg = document.getElementById('zoom-img');
+    zoomImg.src = src;
+    overlay.style.display = 'flex';
+  }
+
+  function useCoupon(id) {
+    if(confirm('指令一旦发出不可撤回，确认要使用这张卡券吗？')) {
+      localStorage.setItem(`coupon_${id}`, 'true'); 
+      render(); 
+    }
+  }
+
+  // --- 🌟 核心同步功能 ---
+  function syncReport() {
+    let usedCount = 0;
+    let usedTitles = [];
+    coupons.forEach(coupon => {
+      if (localStorage.getItem(`coupon_${coupon.id}`) === 'true') {
+        usedCount++;
+        usedTitles.push(coupon.title);
+      }
+    });
+    const report = `【Z-Lab 漫游进度报告】\n----------------\n当前持卡人：姐姐\n漫游进度：${usedCount} / ${coupons.length}\n已核销清单：${usedTitles.length > 0 ? usedTitles.join('、') : '暂无'}\n----------------\n上报时间：${new Date().toLocaleString()}\n(请粘贴发给执行人存档)`;
+
+    const textArea = document.createElement("textarea");
+    textArea.value = report;
+    document.body.appendChild(textArea);
+    textArea.select();
+    try {
+      document.execCommand('copy');
+      alert('【同步成功】\n进度报告已存入剪贴板，请前往微信粘贴发给妹妹执行。');
+    } catch (err) {
+      alert('复制失败，请手动截图发送。');
+    }
+    document.body.removeChild(textArea);
+  }
+
+  // --- 🌟 系统重置功能 ---
+  function resetSystem() {
+    if(confirm('🚨 格式化预警：此操作将清空所有已领取的卡券记录。确定要一键重来吗？')) {
+      const password = prompt('请输入实验室授权码（默认 325）确认操作：');
+      if(password === '325') {
+        localStorage.clear();
+        location.reload();
+      } else {
+        alert('授权码错误，系统锁定。');
+      }
+    }
+  }
+
+  // 初始化渲染
+  render();
+  renderMysteryGrid();
+</script>
+</body>
+</html>
